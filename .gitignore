@@ -1,0 +1,23 @@
+# Local inspection copies of myko.cz; never distribute upstream assets.
+/tmp/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+
+# Dependencies, caches, and logs
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+.cache/
+*.log
