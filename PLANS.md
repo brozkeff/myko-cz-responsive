@@ -81,8 +81,10 @@ Vydání: https://github.com/brozkeff/myko-cz-responsive/releases/tag/v0.0.2. P�
 
 - [x] Zvětšit fotografii v modalu na dostupnou šířku telefonu, zachovat proporce a přístupné zavření.
 - [x] Ověřit portrét, krajinu a panorama při šířkách 320, 412 a 800 px a regresi ostatních stránek.
-- [ ] Zveřejnit experimentální v0.0.4.
+- [x] Zveřejnit experimentální v0.0.4.
 
 Prioritou fotografií je plná šířka a svislé posouvání vysokých snímků. Oprava je v CSS a samostatná devítibodová kontrola v check.cjs (--modal-only). Původní prohlížeč zmenšuje portrét na 232 px při šířce obrazovky 320 px; nový test tuto chybu zachytí. Tagy již vydaných verzí zůstávají beze změny.
 
 Hotfix 0.0.3 je zveřejněn: https://github.com/brozkeff/myko-cz-responsive/releases/tag/v0.0.3. Přímý instalační soubor se shoduje s ověřeným lokálním skriptem.
+
+Verze 0.0.4 je zveřejněna: https://github.com/brozkeff/myko-cz-responsive/releases/tag/v0.0.4. Stažený instalační soubor se shoduje s lokálním skriptem. Ověřeno 55 rozložení, tři varianty startu a devět kombinací fotografií; navíc posouvání vysokých snímků a zavření po posunutí. Ruční potvrzení na Android Firefoxu zůstává otevřené.
