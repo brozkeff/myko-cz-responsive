@@ -24,6 +24,12 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
   const browser = await engine.launch({ timeout: 30000 });
   try {
     const page = await browser.newPage();
+    // Mock only the manager APIs; settings persistence is exercised across reloads.
+    await page.addInitScript(() => {
+      window.GM_getValue = (key, fallback) => JSON.parse(localStorage.getItem(`test:${key}`) ?? JSON.stringify(fallback));
+      window.GM_setValue = (key, value) => localStorage.setItem(`test:${key}`, JSON.stringify(value));
+      window.GM_registerMenuCommand = (name, callback) => { window.testMenu = { name, callback }; };
+    });
     let html = synthetic;
     await page.route('**/*', async route => {
       const url = new URL(route.request().url());
@@ -43,10 +49,12 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
         '/lightbox2/dist/js/lightbox.min.js': ['lightbox.js', 'text/javascript'],
         '/lightbox2/dist/css/lightbox.min.css': ['lightbox.css', 'text/css'],
         '/tools/packunpack.js': ['packunpack.js', 'text/javascript'],
+        ...Object.fromEntries(['lightbox.css', 'prototype.js', 'scriptaculous.js', 'effects.js', 'builder.js', 'lightbox.js']
+          .map(file => [`/lightbox/${file}`, [`legacy-${file}`, file.endsWith('.css') ? 'text/css' : 'text/javascript']])),
       } : {};
       const asset = assets[url.pathname];
       if (asset) return route.fulfill({ contentType: asset[1], body: readFileSync(`tmp/${asset[0]}`) });
-      if (fixtures && /\.jpg$/.test(url.pathname)) return route.fulfill({ contentType: 'image/jpeg', body: readFileSync(url.pathname.endsWith('s.jpg') ? 'tmp/thumbnail.jpg' : 'tmp/photo.jpg') });
+      if (fixtures && /\.jpg$/i.test(url.pathname)) return route.fulfill({ contentType: 'image/jpeg', body: readFileSync(url.pathname.endsWith('s.jpg') ? 'tmp/thumbnail.jpg' : 'tmp/photo.jpg') });
       if (!fixtures && url.pathname.endsWith('.jpg')) return route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="154" height="117"><rect width="154" height="117" fill="green"/></svg>' });
       return route.abort();
     });
@@ -65,7 +73,7 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
         assert.deepEqual(await page.locator('#content a[data-lightbox]').evaluateAll(items => items.map(a => [a.getAttribute('href'), a.getAttribute('title')])), links);
         const preserved = await page.evaluate(() => {
           const copy = document.querySelector('#content').cloneNode(true);
-          copy.querySelectorAll('.myko-mobile-tools, .myko-edibility').forEach(node => node.remove());
+          copy.querySelectorAll('.myko-mobile-tools, .myko-edibility, .myko-settings').forEach(node => node.remove());
           return copy.textContent.replace(/\s+/g, ' ').trim();
         });
         assert.equal(preserved, before.replace(/\s+/g, ' ').trim(), `${name}: original text changed`);
@@ -113,7 +121,74 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
         console.log(`${name}: ${width}px OK`);
       }
     }
+    const sitePages = fixtures ? [
+      ['home', '/'], ['article', '/clanek2638/'], ['advice', '/poradna/'],
+      ['contacts', '/kontakty/'], ['site-search', '/vyhledavani/'],
+    ] : [['synthetic-site', '/poradna/']];
+    for (const [name, path] of sitePages) {
+      html = fixtures ? readFileSync(`tmp/${name}.html`) : synthetic;
+      await page.goto(`https://www.myko.cz${path}`);
+      await page.evaluate(script);
+      assert.equal(await page.locator('#myko-responsive-style').count(), 0, 'Other pages must start unchanged');
+      assert.equal(await page.locator('meta[name="viewport"]').count(), 0);
+      assert.match(await page.evaluate(() => window.testMenu.name), /^Zapnout/);
+      const reload = page.waitForEvent('load');
+      await page.evaluate(() => window.testMenu.callback());
+      await reload;
+      for (const width of [320, 360, 412, 800, 1280]) {
+        await page.setViewportSize({ width, height: width === 800 ? 360 : 800 });
+        await page.reload();
+        const before = await page.locator('#content').textContent();
+        const beforeLinks = await page.locator('#content a').evaluateAll(items => items.map(a => a.getAttribute('href')));
+        await page.evaluate(script);
+        assert.equal(await page.locator('.myko-settings input').isChecked(), true);
+        assert.equal(await page.locator('#myko-mobile-search').count(), 0, 'Atlas search must stay atlas-only');
+        assert.equal(await page.locator('#content').evaluate(node => {
+          const copy = node.cloneNode(true);
+          copy.querySelector('.myko-settings').remove();
+          return copy.textContent;
+        }), before);
+        assert.deepEqual(await page.locator('#content a').evaluateAll(items => items.map(a => a.getAttribute('href'))), beforeLinks);
+        if (width <= 1000) {
+          const overflow = await page.evaluate(() => Array.from(document.querySelectorAll('body *')).filter(node => node.getBoundingClientRect().right > innerWidth + 1).map(node => `${node.tagName}#${node.id}.${node.className}`).slice(0, 10));
+          assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${name} overflow: ${overflow}`);
+          if (fixtures && ['home', 'article'].includes(name)) {
+            await page.locator('a[rel^="lightbox"]').first().click();
+            await page.locator('#lightboxImage').waitFor({ state: 'visible' });
+            assert.ok(await page.locator('#lightboxImage').evaluate(img => Math.abs(img.width / img.height - img.naturalWidth / img.naturalHeight) < 0.03));
+            assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Legacy lightbox overflows');
+            await page.locator('#bottomNavClose').click();
+            await page.locator('#lightbox').waitFor({ state: 'hidden' });
+            await page.locator('#overlay').waitFor({ state: 'hidden' });
+          }
+          if (fixtures && width === 360 && name === 'article') await page.screenshot({ path: 'tmp/article-mobile.png', fullPage: true });
+        } else {
+          assert.equal(await page.locator('#main').evaluate(node => node.getBoundingClientRect().width), 1240);
+        }
+        console.log(`${name}: ${width}px OK`);
+      }
+      const disable = page.waitForEvent('load');
+      await page.locator('.myko-settings input').click();
+      await disable;
+      await page.evaluate(script);
+      assert.equal(await page.locator('#myko-responsive-style').count(), 0);
+      assert.equal(await page.locator('.myko-settings').count(), 0);
+      assert.equal(await page.evaluate(() => GM_getValue('siteWide', false)), false);
+    }
     html = synthetic;
+    await page.goto('https://www.myko.cz/myko-atlas/example/');
+    await page.evaluate(script);
+    assert.equal(await page.locator('.myko-settings input').isChecked(), false);
+    const enable = page.waitForEvent('load');
+    await page.locator('.myko-settings input').click();
+    await enable;
+    await page.evaluate(script);
+    assert.equal(await page.locator('.myko-settings input').isChecked(), true);
+    const disable = page.waitForEvent('load');
+    await page.locator('.myko-settings input').click();
+    await disable;
+    await page.evaluate(script);
+    assert.equal(await page.locator('#myko-responsive-style').count(), 1, 'Disabling whole-site mode must preserve the atlas');
     await page.goto('https://www.myko.cz/poradna/');
     await page.evaluate(script);
     assert.equal(await page.locator('#myko-responsive-style').count(), 0);

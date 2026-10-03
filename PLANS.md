@@ -51,3 +51,16 @@ Testovací Firefox na tomto Macu selhal při spuštění (chyba sandboxu/rendero
 - [x] Zveřejnit tag a předběžné vydání `v0.0.1` pro ruční instalaci na telefonu.
 
 Veřejný repozitář: https://github.com/brozkeff/myko-cz-responsive. Předběžné vydání: https://github.com/brozkeff/myko-cz-responsive/releases/tag/v0.0.1. Přímý instalační odkaz byl stažen a jeho obsah porovnán s lokálním skriptem; shoduje se. GitHub rozpoznává licenci EUPL-1.2. V repozitáři ani v přílohách vydání nejsou stažené podklady myko.cz.
+
+
+## Verze 0.0.2
+
+- [x] Zaznamenat uživatelskou zprávu: první testy 0.0.1 na Moto G85 ve Firefoxu fungují.
+- [x] Přidat volitelné responzivní zobrazení celého webu, výchozí stav vypnuto.
+- [x] Uložit přepínač ve správci skriptů a zpřístupnit jej i v jeho nabídce.
+- [x] Rozšířit metadata a návod k oprávněním na celý web.
+- [x] Ověřit regresi atlasu, přepínač a reprezentativní stránky mimo atlas.
+- [ ] Zveřejnit experimentální v0.0.2 na GitHubu.
+- [ ] Ručně ověřit 0.0.2 na Moto G85 ve Firefoxu.
+
+Verze 0.0.2: 55 kontrol rozložení v Chromium (11 místních stránek při pěti šířkách), oba původní prohlížeče fotografií, zachování textu a odkazů, výchozí vypnutý režim mimo atlas a uložení přepínače přes obnovení stránky. API správce skriptů test simuluje; skutečná oprávnění a nabídka Tampermonkey vyžadují ruční test.

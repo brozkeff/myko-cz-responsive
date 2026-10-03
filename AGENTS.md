@@ -1,12 +1,12 @@
 # Repository instructions
 
 - Communicate with the user in English; preserve the language of edited files. README, changelog, and user-facing controls are Czech.
-- Focus on `/myko-atlas/`: mobile use as a mushroom field guide, especially Android Firefox. Other website sections are secondary and outside the initial release scope.
+- Focus on `/myko-atlas/`: mobile use as a mushroom field guide, especially Android Firefox. Since 0.0.2, other website sections have an optional responsive mode, disabled by default. The atlas stays responsive when it is switched off.
 - Follow the ponytail approach: plain JavaScript and CSS, no framework or dependency unless needed. Prefer CSS to DOM rewrites and retain the website's existing behavior.
 - Keep search, species links, photo enlargement, descriptions, edibility indicators, possible lookalikes, and author credits accessible. Do not alter identification information.
-- Match userscripts only to the intended myko.cz hosts and atlas paths. Preserve zoom, keyboard access, readable contrast, and usable touch targets.
+- Match userscripts only to myko.cz and www.myko.cz; all paths are needed for the optional whole-site mode. Preserve zoom, keyboard access, readable contrast, and usable touch targets.
 - Download inspection pages and assets only into `tmp/`. It is gitignored. Do not commit or bundle myko.cz content or apply our license to upstream assets.
-- Initial planned version: `0.0.1`; use SemVer thereafter. Keep userscript metadata, documentation, and changelog consistent.
+- Current version: `0.0.2`; use SemVer. Keep userscript metadata, documentation, and changelog consistent.
 - License original project code under EUPL-1.2. Include copyright and `SPDX-License-Identifier: EUPL-1.2` in JavaScript and CSS headers. Use `Copyright (c) 2026 Myko.cz Responsive contributors` until the user provides another attribution.
 - Keep the installation artifact self-contained where practical. If CSS is maintained separately, document how it is included and avoid relying on an unpublished remote URL.
 - Verify atlas home, search results, alphabetical/systematic listings, genus pages, and species details at narrow portrait and landscape widths. Check page overflow, image aspect ratios, search submission, photo enlargement, touch targets, and desktop behavior. Report browser/device checks accurately.
