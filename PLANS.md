@@ -60,7 +60,9 @@ Veřejný repozitář: https://github.com/brozkeff/myko-cz-responsive. Předbě�
 - [x] Uložit přepínač ve správci skriptů a zpřístupnit jej i v jeho nabídce.
 - [x] Rozšířit metadata a návod k oprávněním na celý web.
 - [x] Ověřit regresi atlasu, přepínač a reprezentativní stránky mimo atlas.
-- [ ] Zveřejnit experimentální v0.0.2 na GitHubu.
+- [x] Zveřejnit experimentální v0.0.2 na GitHubu.
 - [ ] Ručně ověřit 0.0.2 na Moto G85 ve Firefoxu.
 
 Verze 0.0.2: 55 kontrol rozložení v Chromium (11 místních stránek při pěti šířkách), oba původní prohlížeče fotografií, zachování textu a odkazů, výchozí vypnutý režim mimo atlas a uložení přepínače přes obnovení stránky. API správce skriptů test simuluje; skutečná oprávnění a nabídka Tampermonkey vyžadují ruční test.
+
+Vydání: https://github.com/brozkeff/myko-cz-responsive/releases/tag/v0.0.2. Přímý instalační odkaz na tag `v0.0.2` byl stažen a obsah se shoduje s testovaným lokálním skriptem. Remote používá HTTPS; při publikaci bylo potřeba použít přihlašovací údaje `gh`, protože SSH autentizace selhala.
