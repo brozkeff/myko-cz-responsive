@@ -4,6 +4,21 @@ Změny zapisujeme podle [Keep a Changelog](https://keepachangelog.com/cs/1.1.0/)
 
 ## [Unreleased]
 
+## [0.0.4] - 2026-10-03
+
+Experimentální raná alfa, navazuje na opravu startu v 0.0.3.
+
+### Opraveno
+
+- Zvětšené fotografie v atlasu využívají dostupnou šířku mobilní obrazovky s malým okrajem. Vysoké snímky lze posouvat svisle místo zmenšování podle výšky displeje; poměr stran zůstává zachovaný.
+- Zavírací tlačítko má na mobilu 44 × 44 px, zůstává na obrazovce a znak zavření nevyžaduje stažení obrázku. Ovládání původního prohlížeče fotografií je zachované; desktopové rozložení se nemění.
+
+### Ověření
+
+- Devět kontrol modalu: portrét, krajina a panorama při rozměrech obrazovky 320 × 800, 412 × 915 a 800 × 360 px.
+- 55 kontrol rozložení a tři kontroly startu v Chromium nad místními podklady se simulovaným API správce skriptů.
+- Android Firefox a skutečná instalace čekají na ruční potvrzení.
+
 ## [0.0.3] - 2026-10-03
 
 Experimentální opravné vydání. Uživatel hlásí, že 0.0.2 na telefonu přestala upravovat atlas; přesná příčina v jeho správci skriptů zatím není potvrzená.

@@ -74,13 +74,15 @@ Vydání: https://github.com/brozkeff/myko-cz-responsive/releases/tag/v0.0.2. P�
 - [x] Reprodukovat výpadek 0.0.2 bez API správce a opravit start atlasu.
 - [x] Podporovat původní i asynchronní API a ověřit selhání nastavení či nabídky.
 - [x] Ověřit 55 rozložení a tři varianty startu v Chromium.
-- [ ] Zveřejnit experimentální v0.0.3.
+- [x] Zveřejnit experimentální v0.0.3.
 - [ ] Potvrdit opravu na telefonu uživatele; správce skriptů zatím není známý.
 
 ## Verze 0.0.4 – fotografie v atlasu
 
-- [ ] Zvětšit fotografii v modalu na dostupnou šířku telefonu, zachovat proporce a přístupné zavření.
-- [ ] Ověřit portrét, krajinu a panorama při šířkách 320, 412 a 800 px a regresi ostatních stránek.
+- [x] Zvětšit fotografii v modalu na dostupnou šířku telefonu, zachovat proporce a přístupné zavření.
+- [x] Ověřit portrét, krajinu a panorama při šířkách 320, 412 a 800 px a regresi ostatních stránek.
 - [ ] Zveřejnit experimentální v0.0.4.
 
-Prioritou fotografií je plná šířka a svislé posouvání vysokých snímků. Rozpracované CSS a testy jsou dočasně uložené v ignorované složce tmp/. Tagy již vydaných verzí zůstávají beze změny.
+Prioritou fotografií je plná šířka a svislé posouvání vysokých snímků. Oprava je v CSS a samostatná devítibodová kontrola v check.cjs (--modal-only). Původní prohlížeč zmenšuje portrét na 232 px při šířce obrazovky 320 px; nový test tuto chybu zachytí. Tagy již vydaných verzí zůstávají beze změny.
+
+Hotfix 0.0.3 je zveřejněn: https://github.com/brozkeff/myko-cz-responsive/releases/tag/v0.0.3. Přímý instalační soubor se shoduje s ověřeným lokálním skriptem.

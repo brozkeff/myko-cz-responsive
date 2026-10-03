@@ -1,6 +1,6 @@
 /* Copyright (c) 2026 Myko.cz Responsive contributors
  * SPDX-License-Identifier: EUPL-1.2
- * Version: 0.0.3. Original myko.cz content belongs to its respective authors.
+ * Version: 0.0.4. Original myko.cz content belongs to its respective authors.
  */
 .myko-mobile-tools, .myko-menu-toggle, .myko-edibility { display: none; }
 
@@ -76,8 +76,12 @@
   #righthdr input { max-width: 100%; }
   #footer { height: auto; padding: 8px 12px; line-height: 1.6; }
   .lightbox { max-width: 100%; }
-  .lb-outerContainer, .lb-dataContainer { max-width: 100%; }
-  .lightbox .lb-image { max-width: 100%; height: auto !important; }
+  .lb-outerContainer, .lb-dataContainer { width: calc(100% - 16px) !important; max-width: 100%; }
+  .lb-outerContainer { height: auto !important; }
+  /* ponytail: width takes priority over height fitting; tall photos scroll vertically. */
+  .lightbox .lb-image { width: 100% !important; max-width: 100%; height: auto !important; box-sizing: border-box; }
+  .lb-data .lb-close { position: fixed; z-index: 10000; top: 8px; right: 8px; width: 44px; height: 44px; background: #18371c; color: #fff; border-radius: 4px; text-decoration: none; }
+  .lb-data .lb-close::before { content: '×'; display: block; font: 36px/44px sans-serif; text-align: center; }
   .lb-nav a.lb-prev, .lb-nav a.lb-next, .lb-data .lb-close { opacity: 1; }
   #lightbox, #outerImageContainer, #imageDataContainer { max-width: 100%; }
   #outerImageContainer { height: auto !important; }

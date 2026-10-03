@@ -31,6 +31,7 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
       window.GM_registerMenuCommand = (name, callback) => { window.testMenu = { name, callback }; };
     });
     let html = synthetic;
+    let photoDimensions = null;
     await page.route('**/*', async route => {
       const url = new URL(route.request().url());
       if (route.request().isNavigationRequest()) {
@@ -54,6 +55,10 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
       } : {};
       const asset = assets[url.pathname];
       if (asset) return route.fulfill({ contentType: asset[1], body: readFileSync(`tmp/${asset[0]}`) });
+      if (fixtures && photoDimensions && /\.jpg$/i.test(url.pathname) && !url.pathname.endsWith('s.jpg')) {
+        const [width, height] = photoDimensions;
+        return route.fulfill({ contentType: 'image/svg+xml', body: `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="#48794b"/></svg>` });
+      }
       if (fixtures && /\.jpg$/i.test(url.pathname)) return route.fulfill({ contentType: 'image/jpeg', body: readFileSync(url.pathname.endsWith('s.jpg') ? 'tmp/thumbnail.jpg' : 'tmp/photo.jpg') });
       if (!fixtures && url.pathname.endsWith('.jpg')) return route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="154" height="117"><rect width="154" height="117" fill="green"/></svg>' });
       return route.abort();
@@ -83,6 +88,44 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `Atlas overflow: ${mode}`);
       console.log(`atlas startup ${mode}: OK`);
     }
+    if (fixtures) {
+      html = readFileSync('tmp/species.html');
+      for (const [orientation, dimensions] of [['portrait', [400, 1200]], ['landscape', [1200, 800]], ['panorama', [1200, 300]]]) {
+        photoDimensions = dimensions;
+        for (const [width, height] of [[320, 800], [412, 915], [800, 360]]) {
+          await page.setViewportSize({ width, height });
+          await page.goto('https://www.myko.cz/myko-atlas/Boletus-edulis/');
+          await page.evaluate(script);
+          await page.locator('#content a[data-lightbox]').first().click();
+          await page.locator('.lb-image').waitFor({ state: 'visible' });
+          await page.waitForFunction(() => document.querySelector('.lb-image').naturalWidth > 0);
+          const image = await page.locator('.lb-image').boundingBox();
+          assert.ok(image.width >= width - 24, `${orientation}: modal only ${image.width}px wide at ${width}px`);
+          assert.ok(image.x >= 0 && image.x + image.width <= width + 1, 'Modal image outside viewport');
+          assert.ok(await page.locator('.lb-image').evaluate(img => Math.abs(img.clientWidth / img.clientHeight - img.naturalWidth / img.naturalHeight) < 0.03), 'Modal image distorted');
+          await page.locator('.lb-close').waitFor({ state: 'visible' });
+          await page.waitForFunction(() => ['.lightbox', '.lb-outerContainer', '.lb-dataContainer'].every(selector =>
+            getComputedStyle(document.querySelector(selector)).opacity === '1'));
+          const close = await page.locator('.lb-close').boundingBox();
+          assert.ok(close.x >= 0 && close.x + close.width <= width && close.y >= 0 && close.y + close.height <= height, 'Close button outside screen');
+          if (orientation === 'portrait' && width === 412) await page.screenshot({ path: 'tmp/modal-portrait.png' });
+          if (image.height > height) {
+            await page.locator('.lb-image').evaluate(img => {
+              const bounds = img.getBoundingClientRect();
+              window.scrollBy(0, bounds.bottom - innerHeight);
+            });
+            assert.ok(await page.locator('.lb-image').evaluate(img => img.getBoundingClientRect().bottom <= innerHeight + 1), 'Tall photo bottom cannot be reached');
+            const scrolledClose = await page.locator('.lb-close').boundingBox();
+            assert.ok(scrolledClose.y >= 0 && scrolledClose.y + scrolledClose.height <= height, 'Close button lost after scrolling');
+          }
+          await page.locator('.lb-close').click();
+          await page.locator('.lightbox').waitFor({ state: 'hidden' });
+          console.log(`modal ${orientation}: ${width}x${height} OK`);
+        }
+      }
+      photoDimensions = null;
+    }
+    if (process.argv.includes('--modal-only')) return;
     for (const [name, path] of pages) {
       html = fixtures ? readFileSync(`tmp/${name}.html`) : synthetic;
       for (const width of [320, 360, 412, 800, 1280]) {
@@ -108,7 +151,7 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
           await page.locator('.myko-menu-toggle').click();
           const targets = await page.locator('.myko-mobile-tools nav a[href^="#"]').evaluateAll(items => items.every(a => document.getElementById(a.hash.slice(1))));
           assert.ok(targets, 'Section link has no target');
-          assert.ok(await page.locator('#content .myko-gallery img').evaluateAll(images => images.every(img => !img.naturalWidth || Math.abs(img.width / img.height - img.naturalWidth / img.naturalHeight) < 0.03)), 'Thumbnail aspect ratio changed');
+          assert.ok(await page.locator('#content .myko-gallery img').evaluateAll(images => images.every(img => !img.naturalWidth || Math.abs(img.clientWidth / img.clientHeight - img.naturalWidth / img.naturalHeight) < 0.03)), 'Thumbnail aspect ratio changed');
           assert.equal(await page.locator('.myko-menu-toggle').getAttribute('aria-expanded'), 'true');
           assert.ok(await page.locator('#menu').isVisible());
           await page.locator('.myko-menu-toggle').click();
@@ -116,7 +159,7 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
             await page.locator('#content a[data-lightbox]').first().click();
             await page.locator('.lb-image').waitFor({ state: 'visible' });
             await page.waitForFunction(() => document.querySelector('.lb-image').naturalWidth > 0);
-            assert.ok(await page.locator('.lb-image').evaluate(img => Math.abs(img.width / img.height - img.naturalWidth / img.naturalHeight) < 0.03));
+            assert.ok(await page.locator('.lb-image').evaluate(img => Math.abs(img.clientWidth / img.clientHeight - img.naturalWidth / img.naturalHeight) < 0.03));
             assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Photo viewer overflow');
             await page.keyboard.press('Escape');
             await page.locator('.lightbox').waitFor({ state: 'hidden' });
@@ -180,7 +223,7 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
           if (fixtures && ['home', 'article'].includes(name)) {
             await page.locator('a[rel^="lightbox"]').first().click();
             await page.locator('#lightboxImage').waitFor({ state: 'visible' });
-            assert.ok(await page.locator('#lightboxImage').evaluate(img => Math.abs(img.width / img.height - img.naturalWidth / img.naturalHeight) < 0.03));
+            assert.ok(await page.locator('#lightboxImage').evaluate(img => Math.abs(img.clientWidth / img.clientHeight - img.naturalWidth / img.naturalHeight) < 0.03));
             assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Legacy lightbox overflows');
             await page.locator('#bottomNavClose').click();
             await page.locator('#lightbox').waitFor({ state: 'hidden' });
