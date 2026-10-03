@@ -6,6 +6,8 @@ Verze **0.0.1** obsahuje samostatný uživatelský skript [myko-responsive.user.
 
 **Experimentální raná alfa:** jde o první verzi určenou k ručnímu testování. Může obsahovat chyby a změny původního webu mohou úpravy rozbít. Android Firefox se správci skriptů zatím čeká na ověření na skutečném telefonu.
 
+Zdrojový kód a hlášení chyb: [GitHub](https://github.com/brozkeff/myko-cz-responsive). Balíčky prvního vydání: [v0.0.1](https://github.com/brozkeff/myko-cz-responsive/releases/tag/v0.0.1).
+
 ## Co skript umí
 
 - Přizpůsobit atlas šířce telefonu bez nutnosti posouvat celou stránku do stran.

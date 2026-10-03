@@ -5,6 +5,8 @@
 // @description  Čitelný atlas hub na telefonu: fotografie, hledání a navigace.
 // @author       Myko.cz Responsive contributors
 // @license      EUPL-1.2
+// @homepageURL  https://github.com/brozkeff/myko-cz-responsive
+// @supportURL   https://github.com/brozkeff/myko-cz-responsive/issues
 // @match        *://myko.cz/myko-atlas/*
 // @match        *://www.myko.cz/myko-atlas/*
 // @run-at       document-end
@@ -14,6 +16,7 @@
 
 /* Copyright (c) 2026 Myko.cz Responsive contributors
  * SPDX-License-Identifier: EUPL-1.2
+ * License text: https://github.com/brozkeff/myko-cz-responsive/blob/v0.0.1/LICENSE
  * Original myko.cz content belongs to its respective authors.
  */
 (() => {
