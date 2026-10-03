@@ -15,11 +15,16 @@ Experimentální raná alfa. Uživatel hlásí úspěšné první zkoušky verze
 - Rozšířený rozsah na všechny cesty `myko.cz` a `www.myko.cz`, oprávnění pro nastavení a položku nabídky.
 - Úpravy popisků fotografií, formulářů, stránkování a staršího prohlížeče fotografií používaného mimo atlas.
 
+### Ověření
+
+- 55 kontrol v Chromium: šest stránek atlasu a pět dalších stránek při šířkách 320, 360, 412, 800 a 1280 px.
+- Oba původní prohlížeče fotografií, české hledání, zachování textů a odkazů, uložení přepínače a návrat k původnímu zobrazení. API správce skriptů byla simulovaná.
+- Přímý instalační odkaz ověřen porovnáním s testovaným skriptem.
+
 ### Omezení
 
 - Režim celého webu je určen pro běžné původní rozložení. Specializované stránky a velké tabulky nejsou plošně ověřené.
 - Nový režim ve verzi 0.0.2 čeká na ruční zkoušku na telefonu.
-
 
 ## [0.0.1] - 2026-10-03
 
