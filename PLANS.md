@@ -66,3 +66,21 @@ Veřejný repozitář: https://github.com/brozkeff/myko-cz-responsive. Předbě�
 Verze 0.0.2: 55 kontrol rozložení v Chromium (11 místních stránek při pěti šířkách), oba původní prohlížeče fotografií, zachování textu a odkazů, výchozí vypnutý režim mimo atlas a uložení přepínače přes obnovení stránky. API správce skriptů test simuluje; skutečná oprávnění a nabídka Tampermonkey vyžadují ruční test.
 
 Vydání: https://github.com/brozkeff/myko-cz-responsive/releases/tag/v0.0.2. Přímý instalační odkaz na tag `v0.0.2` byl stažen a obsah se shoduje s testovaným lokálním skriptem. Remote používá HTTPS; při publikaci bylo potřeba použít přihlašovací údaje `gh`, protože SSH autentizace selhala.
+
+
+## Verze 0.0.3 – oprava startu atlasu
+
+- [x] Zkrátit README a přesunout údaje o vydání do changelogu.
+- [x] Reprodukovat výpadek 0.0.2 bez API správce a opravit start atlasu.
+- [x] Podporovat původní i asynchronní API a ověřit selhání nastavení či nabídky.
+- [x] Ověřit 55 rozložení a tři varianty startu v Chromium.
+- [ ] Zveřejnit experimentální v0.0.3.
+- [ ] Potvrdit opravu na telefonu uživatele; správce skriptů zatím není známý.
+
+## Verze 0.0.4 – fotografie v atlasu
+
+- [ ] Zvětšit fotografii v modalu na dostupnou šířku telefonu, zachovat proporce a přístupné zavření.
+- [ ] Ověřit portrét, krajinu a panorama při šířkách 320, 412 a 800 px a regresi ostatních stránek.
+- [ ] Zveřejnit experimentální v0.0.4.
+
+Prioritou fotografií je plná šířka a svislé posouvání vysokých snímků. Rozpracované CSS a testy jsou dočasně uložené v ignorované složce tmp/. Tagy již vydaných verzí zůstávají beze změny.

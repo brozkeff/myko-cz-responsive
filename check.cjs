@@ -58,6 +58,31 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
       if (!fixtures && url.pathname.endsWith('.jpg')) return route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="154" height="117"><rect width="154" height="117" fill="green"/></svg>' });
       return route.abort();
     });
+    // Startup must survive missing, rejected and asynchronous manager APIs.
+    html = fixtures ? readFileSync('tmp/atlas.html') : synthetic;
+    await page.setViewportSize({ width: 412, height: 915 });
+    for (const mode of ['missing', 'rejecting', 'modern']) {
+      await page.goto('https://www.myko.cz/myko-atlas');
+      await page.evaluate(mode => {
+        delete window.GM_getValue;
+        delete window.GM_setValue;
+        delete window.GM_registerMenuCommand;
+        if (mode === 'rejecting') {
+          window.GM_getValue = async () => { throw new Error('Storage unavailable'); };
+          window.GM_registerMenuCommand = () => { throw new Error('Menu unavailable'); };
+        }
+        if (mode === 'modern') window.GM = {
+          getValue: async () => false,
+          setValue: async () => {},
+          registerMenuCommand: async () => {},
+        };
+      }, mode);
+      await page.evaluate(script);
+      assert.equal(await page.locator('#myko-responsive-style').count(), 1, `Atlas startup: ${mode}`);
+      assert.equal(await page.locator('#myko-mobile-search').count(), 1, `Atlas search: ${mode}`);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `Atlas overflow: ${mode}`);
+      console.log(`atlas startup ${mode}: OK`);
+    }
     for (const [name, path] of pages) {
       html = fixtures ? readFileSync(`tmp/${name}.html`) : synthetic;
       for (const width of [320, 360, 412, 800, 1280]) {

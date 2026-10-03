@@ -4,6 +4,22 @@ Změny zapisujeme podle [Keep a Changelog](https://keepachangelog.com/cs/1.1.0/)
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-10-03
+
+Experimentální opravné vydání. Uživatel hlásí, že 0.0.2 na telefonu přestala upravovat atlas; přesná příčina v jeho správci skriptů zatím není potvrzená.
+
+### Opraveno
+
+- Chybějící nebo selhávající API nastavení či nabídky správce už nezastaví úpravu atlasu. V 0.0.2 šlo tento výpadek reprodukovat chybou `GM_getValue is not defined` ještě před vložením CSS.
+- Podpora asynchronního rozhraní `GM.*` vedle původního `GM_*`. Bez API správce se volba ukládá do místního úložiště daného původu webu.
+- Rozpoznání úvodu atlasu i bez koncového lomítka.
+
+### Ověření
+
+- 55 kontrol rozložení v Chromium a tři nové kontroly startu: chybějící API, selhávající API a asynchronní `GM.*`.
+- Stejný test s původním skriptem 0.0.2 reprodukuje chybu startu. Skutečné rozšíření v Android Firefoxu čeká na ruční ověření.
+- Úprava velikosti zvětšených fotografií je plánovaná pro 0.0.4.
+
 ## [0.0.2] - 2026-10-03
 
 Experimentální raná alfa. Uživatel hlásí úspěšné první zkoušky verze 0.0.1 na Moto G85 ve Firefoxu.

@@ -17,7 +17,7 @@ Instaluje se jediný soubor `myko-responsive.user.js`; CSS už je uvnitř. Při 
 
 Atlas se přizpůsobuje vždy. Pro ostatní stránky zaškrtněte **Mobilní zobrazení celého webu**, nebo použijte přepínač v nabídce Tampermonkey. Volba je ve výchozím stavu vypnutá, ukládá se a změna obnoví stránku. Další otevřené karty obnovte ručně. Vypnutí vrátí ostatní stránky k původnímu zobrazení; atlas zůstane responzivní.
 
-Skript má přístup ke všem cestám `myko.cz` a `www.myko.cz`. Oprávnění `GM_getValue`, `GM_setValue` a `GM_registerMenuCommand` slouží pro nastavení a položku nabídky; správce může požadovat jejich potvrzení. Skript neodesílá data dalším službám. Režim celého webu podporuje běžné původní rozložení; specializované stránky a velké tabulky mohou potřebovat další úpravy.
+Skript má přístup ke všem cestám `myko.cz` a `www.myko.cz`. Oprávnění `GM_getValue`, `GM_setValue`, `GM_registerMenuCommand` a jejich protějšky `GM.*` slouží pro nastavení a položku nabídky; správce může požadovat jejich potvrzení. Bez těchto API atlas funguje dál a volba se ukládá v prohlížeči zvlášť pro každou adresu původu (např. `myko.cz` a `www.myko.cz`). Nabídka správce pak není dostupná. Skript neodesílá data dalším službám. Režim celého webu podporuje běžné původní rozložení; specializované stránky a velké tabulky mohou potřebovat další úpravy.
 
 ## Poděkování a licence
 
