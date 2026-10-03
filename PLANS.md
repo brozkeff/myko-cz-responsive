@@ -48,4 +48,6 @@ Testovací Firefox na tomto Macu selhal při spuštění (chyba sandboxu/rendero
 - [x] Zkontrolovat kód a shodu licence s EUPL 1.2; vyloučit podklady myko.cz z publikace.
 - [x] Označit README jako experimentální ranou alfu a připravit přímý instalační odkaz na `v0.0.1`.
 - [x] Vytvořit veřejný repozitář `brozkeff/myko-cz-responsive`, nastavit `origin` a odeslat `master`.
-- [ ] Zveřejnit tag a předběžné vydání `v0.0.1` pro ruční instalaci na telefonu.
+- [x] Zveřejnit tag a předběžné vydání `v0.0.1` pro ruční instalaci na telefonu.
+
+Veřejný repozitář: https://github.com/brozkeff/myko-cz-responsive. Předběžné vydání: https://github.com/brozkeff/myko-cz-responsive/releases/tag/v0.0.1. Přímý instalační odkaz byl stažen a jeho obsah porovnán s lokálním skriptem; shoduje se. GitHub rozpoznává licenci EUPL-1.2. V repozitáři ani v přílohách vydání nejsou stažené podklady myko.cz.
