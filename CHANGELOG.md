@@ -4,6 +4,35 @@ Změny zapisujeme podle [Keep a Changelog](https://keepachangelog.com/cs/1.1.0/)
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-05
+
+Experimentální raná alfa s novou stálou navigací atlasu.
+
+### Přidáno
+
+- Kompaktní horní lišta s názvem stránky, menu ČMS, návratem do atlasu a odkazem na hledání, dostupná i při posouvání. Původní H1 zůstává dostupný čtečkám obrazovky.
+- Viditelné dotykové plochy alespoň 44 × 44 CSS px a přístupné názvy pro ovladače systematiky „+“ a „−“.
+
+### Opraveno
+
+- Browserový test načítá správný podklad pro každou šířku; po kontrole hledání se už další šířky nepřepnou na úvod atlasu.
+
+### Ověření
+
+- Kontroly stálé lišty po posunutí, dostupnosti hledání a dotykové plochy systematiky. Přidané kontroly fotografií 120 × 90 px ověřují zvětšení na dostupnou šířku i nad původní rozměry.
+- Prošlo 55 kontrol rozložení při pěti šířkách včetně desktopové, tři varianty startu a 12 kombinací fotografií v Chromium nad místními podklady.
+- Android 16 VM, Firefox 157.0 a Tampermonkey 5.5.0: skutečná instalace a aktualizace skriptu, stálá lišta při posouvání, nabídka původního menu a návrat k hledání. Výsledky a rozsah dalších kontrol jsou v PLANS.md.
+- Ověřené upscaling chování 0.0.4 na dočasném displeji 2160 × 4800 px / 840 dpi: fotografie 1280 × 960 px využila téměř celou fyzickou šířku obrazovky. Nejde o kontrolu na fyzickém 4K telefonu.
+
+### Omezení
+
+- Uživatelovo hlášení malého modalu zatím nemá potvrzenou reprodukci na konkrétní stránce. Pinch zoom, TalkBack a fyzický telefon zůstávají k ručnímu ověření.
+
+### Dokumentace
+
+- Ověřený postup spuštění existujícího Android 16 VM, snímků a ovládání přes ADB, skutečná instalace Firefoxu, Tampermonkey a skriptu 0.0.4; pravidla předání ovládání uživateli.
+- Plán dalších UX úprav: hlášený malý modal, stálá kompaktní navigace s názvem stránky, dotykové ovladače a hledání. Kontrola modalu na `Boletus-edulis` prošla v emulátoru v portrétu i krajině; hlášení z jiné situace zůstává otevřené.
+
 ## [0.0.4] - 2026-10-03
 
 Experimentální raná alfa, navazuje na opravu startu v 0.0.3.
@@ -32,7 +61,8 @@ Experimentální opravné vydání. Uživatel hlásí, že 0.0.2 na telefonu př
 ### Ověření
 
 - 55 kontrol rozložení v Chromium a tři nové kontroly startu: chybějící API, selhávající API a asynchronní `GM.*`.
-- Stejný test s původním skriptem 0.0.2 reprodukuje chybu startu. Skutečné rozšíření v Android Firefoxu čeká na ruční ověření.
+- Stejný test s původním skriptem 0.0.2 reprodukuje chybu startu.
+- Uživatel potvrdil ruční zkoušku 0.0.3: atlas ve Firefoxu na telefonu opět funguje. Konkrétní správce skriptů zatím není známý.
 - Úprava velikosti zvětšených fotografií je plánovaná pro 0.0.4.
 
 ## [0.0.2] - 2026-10-03

@@ -1,14 +1,25 @@
 /* Copyright (c) 2026 Myko.cz Responsive contributors
  * SPDX-License-Identifier: EUPL-1.2
- * Version: 0.0.4. Original myko.cz content belongs to its respective authors.
+ * Version: 0.1.0. Original myko.cz content belongs to its respective authors.
  */
-.myko-mobile-tools, .myko-menu-toggle, .myko-edibility { display: none; }
+.myko-mobile-tools, .myko-menu-toggle, .myko-edibility, .myko-sticky-header { display: none; }
 
 #content .myko-settings { display: flex; align-items: center; gap: 8px; padding: 10px; margin: 8px; font-size: 16px; line-height: 1.5; text-align: left; background: #fff; color: #18371c; cursor: pointer; }
 #content .myko-settings input { width: 24px; height: 24px; flex-shrink: 0; }
 
 @media screen and (max-width: 1000px) {
   html { scroll-padding-top: 1rem; }
+  html.myko-atlas-nav { scroll-padding-top: 104px; }
+  .myko-atlas-nav #myko-mobile-search { scroll-margin-top: 8px; }
+  .myko-sticky-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; position: sticky; top: 0; z-index: 200; padding: 4px 8px; background: #fff; color: #18371c; border-bottom: 1px solid #52694a; }
+  .myko-sticky-header .myko-page-title { min-width: 0; margin: 0; text-align: left; font: bold 18px/24px sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .myko-sticky-header .myko-menu-toggle { width: auto; min-height: 44px; padding: 8px; margin-left: 8px; }
+  .myko-sticky-header nav { grid-column: 1 / -1; display: flex; gap: 16px; }
+  .myko-sticky-header a { display: inline-flex; align-items: center; min-height: 44px; padding: 4px; color: #8c3b0c; font: 16px/24px sans-serif; }
+  .myko-sticky-header :focus-visible { outline: 3px solid #1d65ad; outline-offset: -3px; }
+  .myko-atlas-nav #menu.myko-menu-open { position: fixed; z-index: 201; top: 96px; left: 8px; width: calc(100% - 16px); max-height: calc(100vh - 112px); max-height: calc(100dvh - 112px); overflow-y: auto; background: #fff; border: 1px solid #52694a; }
+  /* Keep the original H1 available to assistive technology without a second large banner. */
+  .myko-atlas-nav #centerlista { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
   body.myko { margin: 0; background: #e8eee6; }
   #main, #footer { width: 100%; max-width: 100%; }
   #main, #main *, #footer { box-sizing: border-box; }
@@ -62,6 +73,8 @@
   #content .myko-mobile-tools { display: block; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #a9b7a5; }
   #content .myko-edibility { display: inline; margin-left: 8px; font-weight: bold; }
   #content h3 > a:has(img.icon) { display: inline-block; min-width: 44px; min-height: 44px; padding: 8px; }
+  #content h3 > a:has(img[src$="/plus.gif"]), #content h3 > a:has(img[src$="/minus.gif"]) { display: inline-flex; align-items: center; justify-content: center; border: 1px solid #52694a; border-radius: 4px; background: #eef4eb; }
+  #content h3 > a img[src$="/plus.gif"], #content h3 > a img[src$="/minus.gif"] { width: 24px; height: 24px; }
   #content .myko-mobile-tools nav { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 8px; }
   #content .myko-mobile-tools a { display: inline-flex; align-items: center; min-height: 44px; padding: 4px; }
   #content .myko-mobile-tools form { display: flex; flex-wrap: wrap; gap: 8px; }

@@ -90,7 +90,7 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
     }
     if (fixtures) {
       html = readFileSync('tmp/species.html');
-      for (const [orientation, dimensions] of [['portrait', [400, 1200]], ['landscape', [1200, 800]], ['panorama', [1200, 300]]]) {
+      for (const [orientation, dimensions] of [['portrait', [400, 1200]], ['landscape', [1200, 800]], ['panorama', [1200, 300]], ['small-source', [120, 90]]]) {
         photoDimensions = dimensions;
         for (const [width, height] of [[320, 800], [412, 915], [800, 360]]) {
           await page.setViewportSize({ width, height });
@@ -127,8 +127,8 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
     }
     if (process.argv.includes('--modal-only')) return;
     for (const [name, path] of pages) {
-      html = fixtures ? readFileSync(`tmp/${name}.html`) : synthetic;
       for (const width of [320, 360, 412, 800, 1280]) {
+        html = fixtures ? readFileSync(`tmp/${name}.html`) : synthetic;
         await page.setViewportSize({ width, height: width === 800 ? 360 : 800 });
         await page.goto(`https://www.myko.cz${path}`);
         const before = await page.locator('#content').textContent();
@@ -138,6 +138,7 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
         assert.equal(await page.locator('#myko-responsive-style').count(), 1);
         const mobile = width <= 1000;
         assert.equal(await page.locator('.myko-mobile-tools').isVisible(), mobile);
+        assert.equal(await page.locator('.myko-sticky-header').isVisible(), mobile);
         assert.deepEqual(await page.locator('#content a[data-lightbox]').evaluateAll(items => items.map(a => [a.getAttribute('href'), a.getAttribute('title')])), links);
         const preserved = await page.evaluate(() => {
           const copy = document.querySelector('#content').cloneNode(true);
@@ -146,6 +147,19 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
         });
         assert.equal(preserved, before.replace(/\s+/g, ' ').trim(), `${name}: original text changed`);
         if (mobile) {
+          await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+          const header = await page.locator('.myko-sticky-header').boundingBox();
+          assert.ok(Math.abs(header.y) <= 1, 'Atlas header must stay at the top while scrolling');
+          assert.ok(header.height <= 100, 'Sticky controls consume too much screen height');
+          await page.locator('.myko-sticky-header a[href="#myko-mobile-search"]').click();
+          const searchBounds = await page.locator('#myko-mobile-search').boundingBox();
+          assert.ok(searchBounds.y >= header.height && searchBounds.y + searchBounds.height <= (width === 800 ? 360 : 800), 'Search is hidden behind sticky controls');
+          if (fixtures && name === 'systematic') {
+            const expand = page.locator('#content h3 > a:has(img[src$="/plus.gif"])').first();
+            assert.match(await expand.getAttribute('aria-label'), /^Rozbalit: /);
+            const bounds = await expand.boundingBox();
+            assert.ok(bounds.width >= 44 && bounds.height >= 44, 'Systematics toggle is too small');
+          }
           const overflow = await page.evaluate(() => Array.from(document.querySelectorAll('body *')).filter(node => node.getBoundingClientRect().right > innerWidth + 1).map(node => `${node.tagName}#${node.id}.${node.className}: ${Math.round(node.getBoundingClientRect().right)}`).slice(0, 15));
           assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${name} overflows at ${width}px: ${overflow.join(', ')}`);
           await page.locator('.myko-menu-toggle').click();
