@@ -1,26 +1,26 @@
 # Další vývoj
 
-Prioritou je atlas hub jako terénní průvodce v Android Firefoxu. Historie vydání je v [CHANGELOG.md](CHANGELOG.md), instalace a build v [README.md](README.md).
+Usnadnit používání atlasu při hledání hub v terénu, především ve Firefoxu na Androidu. Historie změn je v [CHANGELOG.md](CHANGELOG.md), návod k instalaci a sestavení skriptu v [README.md](README.md).
 
-## Priority
+## Další práce
 
-- [ ] Prověřit hlášený malý modal na konkrétní stránce a fotografii; v dosavadních zkouškách se nereprodukoval. Zachovat plnou šířku i u malých zdrojů na HiDPI displeji, proporce, kredit a dostupné zavření.
-- [ ] Zjednodušit první zobrazení: omezit opakovanou navigaci a zvážit stručný kontext v horní liště podle původního obsahu.
-- [ ] Na fyzickém telefonu ověřit české i latinské hledání, klávesnici, návrat Zpět a pozici stránky; také zoom, větší písmo a TalkBack.
-- [ ] Ověřit ukládání volby celého webu po restartu Firefoxu a desktopové chování v běžném prohlížeči.
+- [ ] Prověřit hlášení, že se fotografie po klepnutí dostatečně nezvětší. Zjistit konkrétní stránku a snímek; při dosavadních zkouškách se problém neprojevil. I fotografie s nízkým rozlišením má na jemném displeji využít celou šířku. Zachovat poměr stran, jméno autora a snadné zavření okna.
+- [ ] Zpřehlednit začátek stránky: omezit opakující se nabídky a zvážit krátký úryvek z původního textu v horní liště.
+- [ ] Na skutečném telefonu vyzkoušet hledání podle českého i latinského názvu, klávesnici a tlačítko Zpět. Po návratu má stránka zůstat posunutá na původní místo. Ověřit také přiblížení stránky, větší písmo a čtečku obrazovky TalkBack.
+- [ ] Ověřit, zda nastavení mobilního zobrazení celého webu zůstane uložené po restartu Firefoxu a zda se web správně zobrazuje i na počítači.
 
-## Důležité pro vývoj
+## Poznámky k vývoji
 
-- Původní web používá Windows-1250. Zachovat české hledání, identifikační údaje, odkazy a autorství.
-- Tabulky atlasu nejsou jen galerie: nepřevádět systematiku či literaturu na mřížku fotografií. Web používá dva prohlížeče fotografií.
-- HiDPI testovat změnou rozlišení i hustoty při stejné CSS šířce; samotné vyšší rozlišení může zapnout desktopové rozložení.
-- Základní rozložení 0.1.0 prošlo v Android 16 Firefoxu s Tampermonkey v portrétu i krajině; automatické kontroly zahrnují rozložení, start skriptu a fotografie. Uživatel potvrzuje praktickou použitelnost. Otevřené body výše jsou cílené další kontroly.
+- Původní web používá kódování Windows-1250. Zachovat hledání s diakritikou, údaje k určování hub, odkazy a jména autorů.
+- Tabulky atlasu obsahují také systematiku a literaturu; nepřevádět je všechny na fotogalerie. Web používá dva různé nástroje pro zvětšování fotografií.
+- U displejů s vysokou hustotou pixelů (HiDPI) měnit při zkouškách rozlišení i hustotu pixelů tak, aby šířka v CSS pixelech zůstala stejná. Samotné zvýšení rozlišení může přepnout stránku do rozložení pro počítač.
+- Verze 0.1.0 prošla kontrolou zobrazení na výšku i na šířku ve Firefoxu s Tampermonkey na Androidu 16. Automatické testy kontrolují rozložení stránky, spuštění skriptu a fotografie. Uživatel potvrdil, že se atlas dá dobře používat; zbývají zkoušky uvedené výše.
 
-## Android emulátor
+## Emulátor Androidu
 
-- Na vývojovém Macu je AVD `MapFlip_API_36` s Firefoxem a Tampermonkey. Jde o sdílený emulátor; nepoužívat `-wipe-data`.
-- Spuštění: `emulator -avd MapFlip_API_36 -no-snapshot-save`. Připojené zařízení zjistit přes `adb devices -l`.
-- Snímek: `adb shell screencap -p /sdcard/myko.png`, poté `adb pull /sdcard/myko.png tmp/android-screen.png`. Pro ovládání použít `adb shell input`; souřadnice vždy odvodit z aktuálního snímku.
-- Místní build: zkopírovat skript do `tmp/`, spustit `python3 -m http.server 8765 --bind 127.0.0.1 --directory tmp`, připojit `adb reverse tcp:8765 tcp:8765` a ve Firefoxu otevřít `http://127.0.0.1:8765/myko-responsive.user.js`. Po zkoušce zastavit server a odebrat pravidlo přes `adb reverse --remove tcp:8765`.
-- Po aktualizaci obnovit testované karty. Po změně hustoty znovu načíst stránku; po zkoušce vrátit rozlišení, hustotu a otáčení.
-- Při ručním testu zadat uživateli jeden konkrétní úkol a pozastavit vstup ADB, dokud uživatel nepředá ovládání zpět. Zapisovat jen problémy důležité pro další vývoj.
+- Na vývojovém Macu je virtuální zařízení `MapFlip_API_36` s Firefoxem a Tampermonkey. Používá ho i jiný projekt; nepoužívat `-wipe-data`.
+- Spuštění: `emulator -avd MapFlip_API_36 -no-snapshot-save`. Připojená zařízení vypíše `adb devices -l`.
+- Snímek obrazovky pořídit příkazem `adb shell screencap -p /sdcard/myko.png` a stáhnout přes `adb pull /sdcard/myko.png tmp/android-screen.png`. K ovládání slouží `adb shell input`; místo klepnutí určit podle aktuálního snímku.
+- Pro zkoušku místní verze zkopírovat skript do `tmp/`, spustit `python3 -m http.server 8765 --bind 127.0.0.1 --directory tmp`, nastavit přesměrování portu přes `adb reverse tcp:8765 tcp:8765` a ve Firefoxu otevřít `http://127.0.0.1:8765/myko-responsive.user.js`. Po zkoušce zastavit server a zrušit přesměrování příkazem `adb reverse --remove tcp:8765`.
+- Po aktualizaci skriptu znovu načíst otevřené stránky. Totéž udělat po změně hustoty pixelů; po zkoušce vrátit původní rozlišení, hustotu pixelů a nastavení otáčení obrazovky.
+- Při ruční zkoušce zadat uživateli jeden konkrétní úkol a přestat zařízení ovládat přes ADB, dokud uživatel nepředá ovládání zpět. Zapisovat jen problémy důležité pro další vývoj.

@@ -1,26 +1,26 @@
 # Myko.cz na mobilu
 
-Uživatelský skript pro pohodlné čtení [atlasu hub myko.cz](https://www.myko.cz/myko-atlas/) na telefonu, především ve Firefoxu na Androidu. Přizpůsobuje fotografie, text a hledání; název stránky a menu zůstávají dostupné při posouvání. Vyžaduje internet.
+Uživatelský skript pro pohodlné čtení [atlasu hub myko.cz](https://www.myko.cz/myko-atlas/) na telefonu, především ve Firefoxu na Androidu. Přizpůsobuje fotografie, text a hledání; název stránky a menu zůstávají viditelné i při posouvání. Vyžaduje internet.
 
 ## Instalace a aktualizace
 
 1. Do Firefoxu nainstalujte [Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/).
 2. Ve Firefoxu otevřete **[instalační odkaz](https://raw.githubusercontent.com/brozkeff/myko-cz-responsive/master/myko-responsive.user.js)** a potvrďte instalaci či aktualizaci. Pokud vidíte jen text, vložte ho do editoru skriptu v Tampermonkey a uložte.
-3. Otevřete nebo obnovte [Myko atlas](https://www.myko.cz/myko-atlas/). Obnovte i ostatní otevřené karty.
+3. Otevřete [Myko atlas](https://www.myko.cz/myko-atlas/). Pokud už ho máte otevřený, načtěte stránku znovu. Totéž udělejte v ostatních kartách s myko.cz.
 
-CSS je součástí skriptu. Při aktualizaci nahraďte předchozí kopii; automatické aktualizace nejsou nastavené. Skript vypnete ve správci. Při potížích zkontrolujte, že je zapnutý a Firefox nepoužívá „Stránka pro počítač“.
+CSS je součástí skriptu. Při aktualizaci nahraďte předchozí kopii; skript se sám neaktualizuje. Vypnete ho v Tampermonkey. Pokud nefunguje, zkontrolujte, že je zapnutý a že je ve Firefoxu vypnutá volba „Stránka pro počítač“.
 
 ## Používání
 
-- **☰ Menu** otevře navigaci ČMS, **Hledat houbu** posune stránku k formuláři. Fotografie lze otevřít klepnutím.
-- Atlas se přizpůsobuje vždy. Pro ostatní stránky zapněte **Mobilní zobrazení celého webu** na stránce nebo v nabídce Tampermonkey. Volba se ukládá a změna obnoví stránku.
-- Skript běží pouze na `myko.cz` a `www.myko.cz`. Oprávnění správce slouží k uložení nastavení a nabídce; bez nich atlas funguje dál. Data se neposílají dalším službám.
+- **☰ Menu** otevře nabídku webu ČMS, **Hledat houbu** posune stránku k formuláři. Fotografie lze otevřít klepnutím.
+- Atlas se obrazovce telefonu přizpůsobuje vždy. Pro ostatní stránky zapněte **Mobilní zobrazení celého webu** na stránce nebo v nabídce Tampermonkey. Nastavení se ukládá; po změně se stránka znovu načte.
+- Skript běží pouze na `myko.cz` a `www.myko.cz`. Oprávnění v Tampermonkey umožňují ukládat nastavení a přidat přepínač do nabídky. Atlas funguje i bez nich. Skript neposílá data dalším službám.
 
 ## Vývoj
 
-CSS upravujte v `myko-responsive.css`; `node build.mjs` ho vloží do skriptu a `node build.mjs --check` ověří shodu. Podklady z webu patří pouze do ignorované složky `tmp/`.
+CSS upravujte v `myko-responsive.css`. Příkaz `node build.mjs` ho vloží do skriptu; `node build.mjs --check` ověří, že vložené CSS odpovídá zdrojovému souboru. Stažené podklady z webu ukládejte pouze do složky `tmp/`, kterou Git nesleduje.
 
-Browserové kontroly vyžadují Playwright:
+Testy v prohlížeči vyžadují Playwright:
 
 ```sh
 npm install --no-save --package-lock=false playwright
@@ -28,13 +28,13 @@ npx playwright install chromium
 node check.cjs --chromium
 ```
 
-S místními podklady přidejte `--fixtures`; testy simulují API správce. Pro testovací Firefox nainstalujte jeho prohlížeč a vynechte `--chromium`.
+Pro testy nad místními podklady přidejte `--fixtures`. Testy simulují rozhraní správce skriptů (API). Chcete-li testovat ve Firefoxu, nainstalujte ho příkazem `npx playwright install firefox` a vynechte `--chromium`.
 
-[PLANS.md](PLANS.md) obsahuje další práci a postup pro Android emulátor, [CHANGELOG.md](CHANGELOG.md) historii změn a [AGENTS.md](AGENTS.md) pravidla vývoje. Chyby hlaste na [GitHubu](https://github.com/brozkeff/myko-cz-responsive/issues).
+[PLANS.md](PLANS.md) obsahuje plán další práce a návod k použití emulátoru Androidu, [CHANGELOG.md](CHANGELOG.md) historii změn a [AGENTS.md](AGENTS.md) pravidla vývoje. Chyby hlaste na [GitHubu](https://github.com/brozkeff/myko-cz-responsive/issues).
 
 ## Poděkování a licence
 
-Děkujeme České mykologické společnosti a autorům [myko.cz](https://www.myko.cz/). Tento nezávislý skript zachovává původní obsah i autorství. Texty, fotografie a původní kód webu nejsou součástí distribuce a naše licence se na ně nevztahuje.
+Děkujeme České mykologické společnosti a autorům [myko.cz](https://www.myko.cz/). Skript vznikl nezávisle na ČMS a zachovává původní obsah i jména autorů. Texty, fotografie a původní kód webu nejsou součástí skriptu a jeho licence se na ně nevztahuje.
 
 Vlastní kód: [EUPL-1.2](LICENSE). Copyright © 2026 brozkeff.
 
