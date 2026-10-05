@@ -36,4 +36,6 @@ S místními podklady přidejte `--fixtures`; testy simulují API správce. Pro 
 
 Děkujeme České mykologické společnosti a autorům [myko.cz](https://www.myko.cz/). Tento nezávislý skript zachovává původní obsah i autorství. Texty, fotografie a původní kód webu nejsou součástí distribuce a naše licence se na ně nevztahuje.
 
-Vlastní kód: [EUPL-1.2](LICENSE). Copyright © 2026 přispěvatelé projektu Myko.cz Responsive.
+Vlastní kód: [EUPL-1.2](LICENSE). Copyright © 2026 brozkeff.
+
+Kód vznikl s pomocí modelu GPT 6.1 Sol. [Zdrojový repozitář na GitHubu](https://github.com/brozkeff/myko-cz-responsive).

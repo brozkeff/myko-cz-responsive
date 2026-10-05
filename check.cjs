@@ -1,5 +1,6 @@
-// Copyright (c) 2026 Myko.cz Responsive contributors
+// Copyright (c) 2026 brozkeff
 // SPDX-License-Identifier: EUPL-1.2
+// Repository: https://github.com/brozkeff/myko-cz-responsive
 // Development-only browser check; no website assets are distributed.
 const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');

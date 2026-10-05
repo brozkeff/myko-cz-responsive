@@ -1,5 +1,6 @@
-// Copyright (c) 2026 Myko.cz Responsive contributors
+// Copyright (c) 2026 brozkeff
 // SPDX-License-Identifier: EUPL-1.2
+// Repository: https://github.com/brozkeff/myko-cz-responsive
 // Embed local CSS so installing one userscript requires no remote resources.
 import { readFileSync, writeFileSync } from 'node:fs';
 
