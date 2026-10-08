@@ -89,6 +89,23 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `Atlas overflow: ${mode}`);
       console.log(`atlas startup ${mode}: OK`);
     }
+    // Exercise real document-start injection, including a delayed settings API.
+    const earlyPage = await browser.newPage({ viewport: { width: 412, height: 915 } });
+    await earlyPage.route('**/*', route => route.fulfill({ contentType: 'text/html', body: synthetic }));
+    await earlyPage.addInitScript(() => {
+      window.GM_getValue = () => new Promise(resolve => setTimeout(() => resolve(false), 100));
+    });
+    await earlyPage.addInitScript({ content: script });
+    await earlyPage.goto('https://www.myko.cz/myko-atlas/');
+    assert.equal(await earlyPage.locator('meta[name="viewport"]').getAttribute('content'), 'width=device-width, initial-scale=1');
+    await earlyPage.locator('#myko-mobile-search').waitFor();
+    await earlyPage.goto('https://www.myko.cz/myko-atlas/example/');
+    await earlyPage.goBack();
+    await earlyPage.locator('#myko-mobile-search').waitFor();
+    assert.equal(await earlyPage.locator('meta[name="viewport"]').count(), 1);
+    assert.equal(await earlyPage.locator('.myko-sticky-header').count(), 1);
+    await earlyPage.close();
+    console.log('document-start and history navigation: OK');
     if (fixtures) {
       html = readFileSync('tmp/species.html');
       for (const [orientation, dimensions] of [['portrait', [400, 1200]], ['landscape', [1200, 800]], ['panorama', [1200, 300]], ['small-source', [120, 90]]]) {
@@ -101,7 +118,8 @@ const synthetic = `<html><head><style>#main{width:1240px}#centercol{width:760px}
           await page.locator('.lb-image').waitFor({ state: 'visible' });
           await page.waitForFunction(() => document.querySelector('.lb-image').naturalWidth > 0);
           const image = await page.locator('.lb-image').boundingBox();
-          assert.ok(image.width >= width - 24, `${orientation}: modal only ${image.width}px wide at ${width}px`);
+          if (width <= height) assert.ok(image.width >= width - 24, `${orientation}: modal only ${image.width}px wide at ${width}px`);
+          else assert.ok(image.y >= 0 && image.y + image.height <= height - 80, 'Landscape photo does not fit above credits');
           assert.ok(image.x >= 0 && image.x + image.width <= width + 1, 'Modal image outside viewport');
           assert.ok(await page.locator('.lb-image').evaluate(img => Math.abs(img.clientWidth / img.clientHeight - img.naturalWidth / img.naturalHeight) < 0.03), 'Modal image distorted');
           await page.locator('.lb-close').waitFor({ state: 'visible' });

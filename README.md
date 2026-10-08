@@ -2,6 +2,8 @@
 
 Uživatelský skript pro pohodlné čtení [atlasu hub myko.cz](https://www.myko.cz/myko-atlas/) na telefonu, především ve Firefoxu na Androidu. Přizpůsobuje fotografie, text a hledání; název stránky a menu zůstávají viditelné i při posouvání. Vyžaduje internet.
 
+Aktuální verze: **0.1.1**. Na šířku se zvětšená fotografie vejde do výšky obrazovky; na výšku využívá šířku telefonu.
+
 ## Instalace a aktualizace
 
 1. Do Firefoxu nainstalujte [Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/).

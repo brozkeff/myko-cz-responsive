@@ -4,6 +4,13 @@ Podle [Keep a Changelog](https://keepachangelog.com/cs/1.1.0/) a [SemVer](https:
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-08
+
+### Opraveno
+
+- Mobilní viewport atlasu se nastavuje už při začátku načítání stránky, před načtením nastavení správce skriptů. Firefox tak nemusí přepočítávat původní široké rozložení; přiblížení stránky zůstává povolené.
+- Zvětšené fotografie v poloze na šířku se vejdou do výšky obrazovky a ponechají místo pro jméno autora. Delší popisky lze posouvat; na výšku fotografie nadále využívají šířku telefonu.
+
 ## [0.1.0] - 2026-10-05
 
 ### Přidáno

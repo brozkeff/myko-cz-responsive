@@ -11,6 +11,8 @@ Usnadnit používání atlasu při hledání hub v terénu, především ve Fire
 
 ## Poznámky k vývoji
 
+- [x] Verze 0.1.1: nastavit viewport atlasu při začátku načítání a přizpůsobit zvětšené fotografie výšce obrazovky v poloze na šířku. Ověřeno ve Firefoxu s Tampermonkey na emulátoru Androidu 16: celý snímek a autor na šířku, otevření detailu a návrat tlačítkem Zpět bez nadměrného přiblížení. Automatické kontroly v Chromiu prošly pro všechny podkladové stránky při šířkách 320–1280 px, včetně hledání a obou prohlížečů fotografií. Automatický desktopový Firefox se na tomto Macu nespustil (chyba grafického framebufferu a sandboxu); jeho kontroly nelze potvrdit.
+- [ ] Na skutečném telefonu zopakovat návrat z výsledků hledání přes Zpět a ověřit zachování ručního přiblížení; emulátor nenahrazuje tuto zkoušku.
 - Původní web používá kódování Windows-1250. Zachovat hledání s diakritikou, údaje k určování hub, odkazy a jména autorů.
 - Tabulky atlasu obsahují také systematiku a literaturu; nepřevádět je všechny na fotogalerie. Web používá dva různé nástroje pro zvětšování fotografií.
 - U displejů s vysokou hustotou pixelů (HiDPI) měnit při zkouškách rozlišení i hustotu pixelů tak, aby šířka v CSS pixelech zůstala stejná. Samotné zvýšení rozlišení může přepnout stránku do rozložení pro počítač.

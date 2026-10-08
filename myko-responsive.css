@@ -1,7 +1,7 @@
 /* Copyright (c) 2026 brozkeff
  * Repository: https://github.com/brozkeff/myko-cz-responsive
  * SPDX-License-Identifier: EUPL-1.2
- * Version: 0.1.0. Original myko.cz content belongs to its respective authors.
+ * Version: 0.1.1. Original myko.cz content belongs to its respective authors.
  */
 .myko-mobile-tools, .myko-menu-toggle, .myko-edibility, .myko-sticky-header { display: none; }
 
@@ -102,6 +102,12 @@
   #lightbox #lightboxImage { max-width: 100%; max-height: 75vh; height: auto; }
   #lightbox #imageDataContainer { font-size: 14px; }
   #lightbox #prevLink, #lightbox #nextLink { max-height: 75vh; }
+}
+
+@media screen and (max-width: 1000px) and (orientation: landscape) {
+  /* Fit the whole photo above its credits; longer captions remain scrollable. */
+  .lightbox { position: fixed; top: 8px !important; bottom: 8px; overflow-y: auto; }
+  .lightbox .lb-image { width: auto !important; max-height: calc(100vh - 100px); max-height: calc(100dvh - 100px); margin: 0 auto; }
 }
 
 @media screen and (max-width: 359px) {
